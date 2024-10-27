@@ -22,3 +22,20 @@ A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+## Running the App
+
+To run the app, you can use the `Run and Debug` tab & hit the `Run and Debug` button when `main.dart` is the current tab in VS Code or use the following CLI command:
+
+```bash
+flutter run
+```
+
+Follow the command line instructions to run the app on a simulator or device and the different options available to you.
+
+## Flutter Commands
+
+While the `flutter run` command is running, you can use the following commands to interact with the app:
+`r` - Hot reload -> reloads the app without restarting it and preserves the app state
+`R` - Hot restart -> restarts the app and resets the app state
+
