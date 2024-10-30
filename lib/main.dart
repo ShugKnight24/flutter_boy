@@ -11,13 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Demo `Widget` title',
       // Application Theme
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // The title that populates the AppBar
+      // Argument of title, would require all properties of MyHomePage object
+      home: const MyHomePage(title: 'Flutter Demo App Bar Title'),
     );
   }
 }
@@ -25,18 +27,13 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+  // Properties of the widget
+  // Properties represent the state
+  // Fields in a Widget subclass are always marked "final"
   final String title;
 
   @override
+  // Creates the state of the widget
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
@@ -45,29 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      // setState tells Flutter to rerun the build method of this widget
       _counter++;
     });
   }
 
   @override
+  // Build method runs every time the setState is called
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: ColorScheme.fromSeed(seedColor: Colors.red).primary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -90,9 +75,19 @@ class _MyHomePageState extends State<MyHomePage> {
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
+          // Array of widgets, displayed in a column
           children: <Widget>[
+            // can use .tonal on FilledButton to change the color
+            FilledButton(
+              onPressed: _incrementCounter,
+              child:
+                  const Text("I'm a Filled Button that increments the counter"),
+            ),
             const Text(
-              'You have pushed the button this many times:',
+              'You can also press the `+` button on the bottom right to increment the counter',
+            ),
+            const Text(
+              'You have pushed the button(s) this many times:',
             ),
             Text(
               '$_counter',
