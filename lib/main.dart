@@ -19,7 +19,61 @@ class MyApp extends StatelessWidget {
       ),
       // The title that populates the AppBar
       // Argument of title, would require all properties of MyHomePage object
-      home: const MyHomePage(title: 'Flutter Demo App Bar Title'),
+      home: const MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    MyHomePage(title: 'Home Page'),
+    TodoListScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        // TODO: Think of a better way to change the title
+        // Especially when multiple screens are added
+        title: Text(_widgetOptions[_selectedIndex] is MyHomePage
+            ? 'Home'
+            : 'Todo List'),
+      ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Todo List',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
@@ -101,6 +155,20 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class TodoListScreen extends StatelessWidget {
+  const TodoListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Todo List Screen',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
     );
   }
 }
