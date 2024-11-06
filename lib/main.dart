@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// TODO: Begin considering how to architect & structure the app
+// Domain Driven Design?
 void main() {
   runApp(const MyApp());
 }
@@ -144,15 +146,98 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TodoListScreen extends StatelessWidget {
+class Todo {
+  String title;
+  bool isCompleted;
+
+  Todo({
+    required this.title,
+    this.isCompleted = false,
+  });
+}
+
+class TodoListScreen extends StatefulWidget {
   const TodoListScreen({super.key});
+  @override
+  State<TodoListScreen> createState() => _TodoListScreenState();
+}
+
+class _TodoListScreenState extends State<TodoListScreen> {
+  // TODO: Look into why Flutter uses _ for variables / methods / classes / etc
+  // does it actually make the item private or a convention?
+  final List<Todo> _todos = [];
+  final TextEditingController _controller = TextEditingController();
+
+  // TODO: Add UPDATE functionality
+  // TODO: Add Submit on enter / specific key press functionality
+  void _addTodo() {
+    setState(() {
+      _todos.add(Todo(
+        title: _controller.text,
+      ));
+      _controller.clear();
+    });
+  }
+
+  void _toggleTodoCompletion(int index) {
+    setState(() {
+      _todos[index].isCompleted = !_todos[index].isCompleted;
+    });
+  }
+
+  void _deleteTodoAt(int index) {
+    setState(() {
+      _todos.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Todo List Screen',
-        style: Theme.of(context).textTheme.headlineMedium,
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Add a todo',
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _addTodo,
+            child: const Text('Add'),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _todos.length,
+              itemBuilder: (context, index) {
+                final todo = _todos[index];
+                return ListTile(
+                  title: Text(
+                    todo.title,
+                    style: TextStyle(
+                      decoration: todo.isCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  leading: Checkbox(
+                    value: todo.isCompleted,
+                    onChanged: (bool? value) {
+                      _toggleTodoCompletion(index);
+                    },
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _deleteTodoAt(index),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
