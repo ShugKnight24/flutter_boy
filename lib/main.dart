@@ -11,14 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo `Widget` title',
       // Application Theme
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      // The title that populates the AppBar
-      // Argument of title, would require all properties of MyHomePage object
       home: const MainScreen(),
     );
   }
@@ -35,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    MyHomePage(title: 'Home Page'),
+    MyHomePage(),
     TodoListScreen(),
   ];
 
@@ -79,13 +76,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // Properties of the widget
-  // Properties represent the state
-  // Fields in a Widget subclass are always marked "final"
-  final String title;
-
+  const MyHomePage({super.key});
   @override
   // Creates the state of the widget
   State<MyHomePage> createState() => _MyHomePageState();
@@ -105,12 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
   // Build method runs every time the setState is called
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorScheme.fromSeed(seedColor: Colors.red).primary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
