@@ -168,7 +168,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
   final List<Todo> _todos = [];
   final TextEditingController _controller = TextEditingController();
 
-  // TODO: Add UPDATE functionality
   void _addTodo() {
     setState(() {
       _todos.add(Todo(
@@ -188,6 +187,41 @@ class _TodoListScreenState extends State<TodoListScreen> {
     setState(() {
       _todos.removeAt(index);
     });
+  }
+
+  void _editTodoAt(int index) {
+    final TextEditingController editController =
+        TextEditingController(text: _todos[index].title);
+
+    // TODO: better to edit in line w/ a text input?
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Todo'),
+          content: TextField(
+            controller: editController,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _todos[index].title = editController.text;
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -233,9 +267,18 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       _toggleTodoCompletion(index);
                     },
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => _deleteTodoAt(index),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () => _editTodoAt(index),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _deleteTodoAt(index),
+                      ),
+                    ],
                   ),
                 );
               },
