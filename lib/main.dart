@@ -169,7 +169,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
   final TextEditingController _controller = TextEditingController();
 
   // TODO: Add UPDATE functionality
-  // TODO: Add Submit on enter / specific key press functionality
   void _addTodo() {
     setState(() {
       _todos.add(Todo(
@@ -203,6 +202,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
               decoration: const InputDecoration(
                 labelText: 'Add a todo',
               ),
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  _addTodo();
+                }
+              },
             ),
           ),
           ElevatedButton(
