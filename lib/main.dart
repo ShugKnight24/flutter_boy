@@ -201,6 +201,14 @@ class _TodoListScreenState extends State<TodoListScreen> {
           title: const Text('Edit Todo'),
           content: TextField(
             controller: editController,
+            onSubmitted: (value) {
+              if (value.isNotEmpty) {
+                setState(() {
+                  _todos[index].title = value;
+                });
+                Navigator.pop(context);
+              }
+            },
           ),
           actions: [
             TextButton(
