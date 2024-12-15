@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import './providers/todo_provider.dart';
 
 // TODO: Begin considering how to architect & structure the app
 // Domain Driven Design?
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -146,52 +150,89 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Todo {
-  String title;
-  bool isCompleted;
-
-  Todo({
-    required this.title,
-    this.isCompleted = false,
-  });
-}
-
-class TodoListScreen extends StatefulWidget {
+// TODO: Create a seperate file for the TodoListScreen
+class TodoListScreen extends ConsumerWidget {
   const TodoListScreen({super.key});
+
   @override
-  State<TodoListScreen> createState() => _TodoListScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(todoProvider);
+    final todoNotifier = ref.read(todoProvider.notifier);
+    final TextEditingController textController = TextEditingController();
 
-class _TodoListScreenState extends State<TodoListScreen> {
-  // TODO: Look into why Flutter uses _ for variables / methods / classes / etc
-  // does it actually make the item private or a convention?
-  final List<Todo> _todos = [];
-  final TextEditingController _controller = TextEditingController();
-
-  void _addTodo() {
-    setState(() {
-      _todos.add(Todo(
-        title: _controller.text,
-      ));
-      _controller.clear();
-    });
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: textController,
+              decoration: const InputDecoration(
+                labelText: 'Add a todo',
+              ),
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  todoNotifier.addTodo(value);
+                  textController.clear();
+                }
+              },
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (textController.text.isNotEmpty) {
+                todoNotifier.addTodo(textController.text);
+                textController.clear();
+              }
+            },
+            child: const Text('Add'),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                final todo = todos[index];
+                return ListTile(
+                  title: Text(
+                    todo.title,
+                    style: TextStyle(
+                      decoration: todo.isCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  leading: Checkbox(
+                    value: todo.isCompleted,
+                    onChanged: (bool? value) {
+                      todoNotifier.toggleTodoCompletion(index);
+                    },
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () =>
+                            _editTodoAt(context, todoNotifier, index),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => todoNotifier.deleteTodoAt(index),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  void _toggleTodoCompletion(int index) {
-    setState(() {
-      _todos[index].isCompleted = !_todos[index].isCompleted;
-    });
-  }
-
-  void _deleteTodoAt(int index) {
-    setState(() {
-      _todos.removeAt(index);
-    });
-  }
-
-  void _editTodoAt(int index) {
+  void _editTodoAt(BuildContext context, TodoNotifier todoNotifier, int index) {
     final TextEditingController editController =
-        TextEditingController(text: _todos[index].title);
+        TextEditingController(text: todoNotifier.state[index].title);
 
     // TODO: better to edit in line w/ a text input?
     showDialog(
@@ -203,9 +244,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
             controller: editController,
             onSubmitted: (value) {
               if (value.isNotEmpty) {
-                setState(() {
-                  _todos[index].title = value;
-                });
+                todoNotifier.editTodoAt(index, value);
                 Navigator.pop(context);
               }
             },
@@ -213,9 +252,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                setState(() {
-                  _todos[index].title = editController.text;
-                });
+                if (editController.text.isNotEmpty) {
+                  todoNotifier.editTodoAt(index, editController.text);
+                }
                 Navigator.pop(context);
               },
               child: const Text('Save'),
@@ -229,71 +268,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                labelText: 'Add a todo',
-              ),
-              onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  _addTodo();
-                }
-              },
-            ),
-          ),
-          ElevatedButton(
-            onPressed: _addTodo,
-            child: const Text('Add'),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _todos.length,
-              itemBuilder: (context, index) {
-                final todo = _todos[index];
-                return ListTile(
-                  title: Text(
-                    todo.title,
-                    style: TextStyle(
-                      decoration: todo.isCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                  leading: Checkbox(
-                    value: todo.isCompleted,
-                    onChanged: (bool? value) {
-                      _toggleTodoCompletion(index);
-                    },
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _editTodoAt(index),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteTodoAt(index),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
