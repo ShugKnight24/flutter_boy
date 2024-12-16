@@ -34,6 +34,10 @@ A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- https://pub.dev/
+- https://flutter.dev/multi-platform
+- [Riverpod](https://riverpod.dev/)
+  - Provider package for Flutter
 
 ## Running the App
 
@@ -52,11 +56,21 @@ While the `flutter run` command is running, you can use the following commands t
 - `r` - Hot reload -> reloads the app without restarting it and preserves the app state
 - `R` - Hot restart -> restarts the app and resets the app state
 
+<!-- TODO: Write about this command clearing the cache -->
+
 ## Flutter Clean
+
+<!-- TODO: Write about potential issues w/ cocoapods when using `shared_preferences` and how to resolve -->
 
 ## TODOs
 
 - [] API Setup
   - Consume and utilize a REST API
     - https://the-one-api.dev/
-    - Openweather
+- Improve TODO list functionality
+- Add weather screen
+  - Consume Openweather API
+- Add a game - something simple
+- Add a pomodoro screen
+- Add basic user settings screen
+- Add additional settings
