@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './providers/todo_provider.dart';
+import '../models/todo.dart';
 
 // TODO: Begin considering how to architect & structure the app
 // Domain Driven Design?
@@ -156,13 +157,14 @@ class TodoListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todoProvider);
-    final todoNotifier = ref.read(todoProvider.notifier);
+    final List<Todo> todos = ref.watch<List<Todo>>(todoProvider);
+    final TodoNotifier todoNotifier =
+        ref.read<TodoNotifier>(todoProvider.notifier);
     final TextEditingController textController = TextEditingController();
 
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -170,7 +172,7 @@ class TodoListScreen extends ConsumerWidget {
               decoration: const InputDecoration(
                 labelText: 'Add a todo',
               ),
-              onSubmitted: (value) {
+              onSubmitted: (String value) {
                 if (value.isNotEmpty) {
                   todoNotifier.addTodo(value);
                   textController.clear();
@@ -190,8 +192,8 @@ class TodoListScreen extends ConsumerWidget {
           Expanded(
             child: ListView.builder(
               itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
+              itemBuilder: (BuildContext context, int index) {
+                final Todo todo = todos[index];
                 return ListTile(
                   title: Text(
                     todo.title,
@@ -209,7 +211,7 @@ class TodoListScreen extends ConsumerWidget {
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () =>
@@ -235,33 +237,33 @@ class TodoListScreen extends ConsumerWidget {
         TextEditingController(text: todoNotifier.state[index].title);
 
     // TODO: better to edit in line w/ a text input?
-    showDialog(
+    showDialog<dynamic>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Edit Todo'),
           content: TextField(
             controller: editController,
-            onSubmitted: (value) {
+            onSubmitted: (String value) {
               if (value.isNotEmpty) {
                 todoNotifier.editTodoAt(index, value);
-                Navigator.pop(context);
+                Navigator.pop<Object?>(context);
               }
             },
           ),
-          actions: [
+          actions: <Widget>[
             TextButton(
               onPressed: () {
                 if (editController.text.isNotEmpty) {
                   todoNotifier.editTodoAt(index, editController.text);
                 }
-                Navigator.pop(context);
+                Navigator.pop<Object?>(context);
               },
               child: const Text('Save'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop<Object?>(context);
               },
               child: const Text('Cancel'),
             ),

@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/todo.dart';
 
 class TodoNotifier extends StateNotifier<List<Todo>> {
-  TodoNotifier() : super([]);
+  TodoNotifier() : super(<Todo>[]);
 
   void addTodo(String title) {
-    state = [
+    state = <Todo>[
       ...state,
       Todo(
         title: title,
@@ -14,7 +14,7 @@ class TodoNotifier extends StateNotifier<List<Todo>> {
   }
 
   void toggleTodoCompletion(int index) {
-    state = [
+    state = <Todo>[
       for (int i = 0; i < state.length; i++)
         if (i == index)
           Todo(
@@ -27,14 +27,14 @@ class TodoNotifier extends StateNotifier<List<Todo>> {
   }
 
   void deleteTodoAt(int index) {
-    state = [
+    state = <Todo>[
       for (int i = 0; i < state.length; i++)
         if (i != index) state[i],
     ];
   }
 
   void editTodoAt(int index, String newTitle) {
-    state = [
+    state = <Todo>[
       for (int i = 0; i < state.length; i++)
         if (i == index)
           Todo(
