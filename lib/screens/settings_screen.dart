@@ -20,6 +20,8 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Divider(),
+            // TODO: Make a custom switch widget
             SwitchListTile(
               title: const Text('Dark Mode'),
               value: themeMode == ThemeMode.dark,
@@ -27,7 +29,13 @@ class SettingsScreen extends ConsumerWidget {
                 themeNotifier
                     .setTheme(value ? ThemeMode.dark : ThemeMode.light);
               },
+              secondary: Icon(
+                themeMode == ThemeMode.dark
+                    ? Icons.nights_stay
+                    : Icons.wb_sunny,
+              ),
             ),
+            const Divider(),
           ],
         ),
       ),
