@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/theme_provider.dart';
 
-// TODO: Select different colors for better contrast on dark mode
-// especially for icon & text colors
+// TODO: Add additional settings
+// TODO: Add additional themes?
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 

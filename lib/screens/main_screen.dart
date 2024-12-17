@@ -28,7 +28,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
         // TODO: Improve title to show current screen
         title: Text(_widgetOptions[_selectedIndex] is HomeScreen
             ? 'Home'

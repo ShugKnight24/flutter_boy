@@ -9,6 +9,26 @@ void main() {
   ));
 }
 
+final lightTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.red,
+    brightness: Brightness.light,
+  ),
+  useMaterial3: true,
+  appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.red, foregroundColor: Colors.white),
+);
+
+final darkTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.red,
+    brightness: Brightness.dark,
+  ),
+  useMaterial3: true,
+  appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black, foregroundColor: Colors.white),
+);
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
@@ -18,11 +38,8 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       title: 'Flutter Test',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: themeMode,
       home: const MainScreen(),
     );
