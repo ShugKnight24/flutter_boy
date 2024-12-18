@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'games_screen.dart';
 import 'home_screen.dart';
-import 'todo_screen.dart';
 import 'settings_screen.dart';
+import 'todo_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     TodoScreen(),
+    GamesScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,7 +33,9 @@ class _MainScreenState extends State<MainScreen> {
         // TODO: Improve title to show current screen
         title: Text(_widgetOptions[_selectedIndex] is HomeScreen
             ? 'Home'
-            : 'Todo List'),
+            : _widgetOptions[_selectedIndex] is TodoScreen
+                ? 'Todo List'
+                : 'Games'),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -56,6 +60,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Todo List',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.videogame_asset),
+            label: 'Games',
           ),
         ],
         currentIndex: _selectedIndex,
