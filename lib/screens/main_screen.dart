@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'fitness_screen.dart';
 import 'games_screen.dart';
 import 'home_screen.dart';
+import 'pomodoro_screen.dart';
 import 'settings_screen.dart';
 import 'todo_screen.dart';
 
@@ -18,6 +20,8 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     TodoScreen(),
     GamesScreen(),
+    PomodoroScreen(),
+    FitnessScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -26,16 +30,19 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  static const List<String> _titles = <String>[
+    'Home',
+    'Todo List',
+    'Games',
+    'Pomodoro Timer',
+    'Fitness Tracker',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TODO: Improve title to show current screen
-        title: Text(_widgetOptions[_selectedIndex] is HomeScreen
-            ? 'Home'
-            : _widgetOptions[_selectedIndex] is TodoScreen
-                ? 'Todo List'
-                : 'Games'),
+        title: Text(_titles[_selectedIndex]),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -65,9 +72,18 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.videogame_asset),
             label: 'Games',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer),
+            label: 'Pomodoro',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Fitness',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurface,
         onTap: _onItemTapped,
       ),
     );
